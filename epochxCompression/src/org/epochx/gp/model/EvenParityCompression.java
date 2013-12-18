@@ -139,19 +139,10 @@ public class EvenParityCompression extends GPModel {
                 { System.out.print(difference[k]?0:1); }
                 System.out.println();
                 
-                boolean[] perfectSolution = new boolean[inputValues.length];
-                for (int i=0;i<inputValues.length;i++)
-                {
-                    perfectSolution[i] = true;
-                }
-                
+                /** calculate the compressed size of the difference **/
                 int compressedLength = lzwCompression.compress(difference);
-                int compressedPerfect = lzwCompression.compress(perfectSolution);
-                
                 System.out.println(compressedLength);
-                System.out.println(compressedPerfect);
-                
-                int output = compressedLength - compressedPerfect +1;
+                int output = compressedLength;
                 
                 /* check for complete solution */
                 boolean solved = true;
