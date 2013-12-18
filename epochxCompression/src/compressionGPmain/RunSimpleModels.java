@@ -14,7 +14,7 @@ public class RunSimpleModels {
         // Construct the model.
         final GPModel[] models = new GPModel[2];
         models[0] = new EvenParity(4);
-        models[1] = new EvenParityCompression(4);
+        models[1] = new EvenParityCompression(10);
 
         for (int i=0;i<2;i++)
         {

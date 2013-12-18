@@ -27,6 +27,7 @@ import org.epochx.epox.bool.*;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.util.BoolUtils;
+import lzwCompression.*;
 
 /**
  * GP model for the even parity problems.
@@ -116,16 +117,51 @@ public class EvenParityCompression extends GPModel {
 		}
                 
                 //just print it!
+                System.out.println("\n");
+                System.out.print("Output:      ");
                 for (int k=0;k<inputValues.length;k++)
                 { System.out.print(outputs[k]?0:1); }
                 System.out.println();
+                System.out.print("Target:      ");
                 for (int k=0;k<inputValues.length;k++)
                 { System.out.print(targets[k]?0:1); }
-                System.out.println("\n");
+                System.out.println();
                 //end of print it!
+                
+                boolean[] difference = new boolean[inputValues.length];
 
-                //CWP - we need to calculate the score here
-		return inputValues.length - score;
+                for (int i=0;i<inputValues.length;i++)
+                {
+                    difference[i] = outputs[i]==targets[i];
+                }
+                System.out.print("Difference:  ");
+                for (int k=0;k<inputValues.length;k++)
+                { System.out.print(difference[k]?0:1); }
+                System.out.println();
+                
+                boolean[] perfectSolution = new boolean[inputValues.length];
+                for (int i=0;i<inputValues.length;i++)
+                {
+                    perfectSolution[i] = true;
+                }
+                
+                int compressedLength = lzwCompression.compress(difference);
+                int compressedPerfect = lzwCompression.compress(perfectSolution);
+                
+                System.out.println(compressedLength);
+                System.out.println(compressedPerfect);
+                
+                int output = compressedLength - compressedPerfect +1;
+                
+                /* check for complete solution */
+                boolean solved = true;
+                for (int i=0;i<inputValues.length;i++)
+                {
+                    if (outputs[i]!=targets[i]) { solved = false; }
+                }
+                if (solved) { output = 0; }
+                    
+		return output;
 	}
 
 	/*
